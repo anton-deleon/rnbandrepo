@@ -9,11 +9,13 @@ This is the official song repository of Rock of the Nations Gospel Fellowship's 
 - Transposing of chords
 - Saved keys per singer per song
 - Automatic transposing based on singer
+- Auto-scrolling
 
 Songs are parsed using [ChordSheetJS](https://github.com/martijnversluis/ChordSheetJS).
 
 ### Planned Features:
 - Dynamic updating of songs and lineups
+- User authentication
 - Offline availability
 
 
@@ -27,6 +29,7 @@ I am an aspiring full stack developer who recently finished my studies in Inform
 
 This project started after my friends approached me with these issues:
 - Chord sheets found from different sources, which made rehearsals confusing
+- Lengthy preparation time for gathering chord sheets before rehearsals
 - Transpose features being locked behind a paywall by most online chord sheets
 - Singers forgetting what key they sing for certain songs
 
@@ -41,3 +44,5 @@ The biggest issue I faced was finding where to store the files for the lyrics an
 The project is constantly being developed based on feedback from the band and optimizations I can find. If you stumbled into my project somehow, I'd love it if you can leave me some feedback as well!
 
 And if you're also a part of your church band, feel free to clone this project to use for your own. Let me know if you do!
+
+You can contact me through the email: anton_dleon@yahoo.com
