@@ -64,13 +64,25 @@ function Sidebar({ toggleLoadSong, showSidebar, toggleSidebar }) {
     ].filter(list => list.date && list.date.trim() !== '');
 
     const today = new Date();
+
     songLists.sort((a, b) => {
         const dateA = new Date(a.date);
         const dateB = new Date(b.date);
+
+        // Prioritize today's date at the top
+        if (dateA.toDateString() === today.toDateString()) return -1;
+        if (dateB.toDateString() === today.toDateString()) return 1;
+
         const diffA = dateA - today;
         const diffB = dateB - today;
+
+        // Both dates are in the future: sort by closest first
         if (diffA >= 0 && diffB >= 0) return diffA - diffB;
+
+        // Both dates are in the past: sort by closest first (most recent past)
         if (diffA < 0 && diffB < 0) return diffA - diffB;
+
+        // One future, one past: put future before past
         if (diffA >= 0) return -1;
         return 1;
     });

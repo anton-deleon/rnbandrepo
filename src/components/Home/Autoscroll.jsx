@@ -3,7 +3,7 @@ import '../../css/autoscroll.css';
 
 function Autoscroll({ containerRef }) {
     const intervalRef = useRef(null);
-    const scrollSpeedRef = useRef(5);
+    const scrollSpeedRef = useRef(2);
 
     const [isScrolling, setIsScrolling] = useState(false);
     const [, forceRender] = useState(0); // only for displaying speed
@@ -13,12 +13,19 @@ function Autoscroll({ containerRef }) {
 
         intervalRef.current = setInterval(() => {
             containerRef.current?.scrollBy(0, scrollSpeedRef.current);
+            if (containerRef.current) {
+                const { scrollTop, clientHeight, scrollHeight } = containerRef.current;
+                if (scrollTop + clientHeight >= scrollHeight - 1) {
+                    stopScroll();
+                }
+            }
         }, 100);
     };
 
     const stopScroll = () => {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
+        setIsScrolling(false);
     };
 
     const toggleScroll = () => {
@@ -30,12 +37,12 @@ function Autoscroll({ containerRef }) {
     };
 
     const increaseSpeed = () => {
-        scrollSpeedRef.current += 1;
+        scrollSpeedRef.current += 0.5;
         forceRender(v => v + 1); // only updates displayed number
     };
 
     const decreaseSpeed = () => {
-        scrollSpeedRef.current = Math.max(1, scrollSpeedRef.current - 1);
+        scrollSpeedRef.current = Math.max(0.5, scrollSpeedRef.current - 0.5);
         forceRender(v => v + 1);
     };
 
@@ -52,7 +59,7 @@ function Autoscroll({ containerRef }) {
             </div>
 
             <div className="plus-sign" onClick={increaseSpeed}>+</div>
-            <div className="scroll-value">{scrollSpeedRef.current / 10}</div>
+            <div className="scroll-value">{scrollSpeedRef.current / 5}</div>
             <div className="minus-sign" onClick={decreaseSpeed}>-</div>
         </div>
     )
