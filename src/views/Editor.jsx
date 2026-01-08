@@ -76,10 +76,12 @@ function Editor() {
         setActiveSong(song);
     }
 
-    const handleEditSong = (song) => {
+    const handleEditSong = (editedSong) => {
         try {
             const tempRaw = sessionStorage.getItem("temp");
             var arr = tempRaw ? JSON.parse(tempRaw) : [];
+
+            const {lyrics, ...song} = editedSong;
 
             const existing = arr.find(s => s.id === song.id)
             if (existing) {
@@ -137,7 +139,7 @@ function Editor() {
                         <div className="editor-button back" onClick={() => navigate('/')}>
                             Back
                         </div>
-                        <div className="editor-button add">
+                        <div className="editor-button add" onClick={() => handleActiveSong({})}>
                             Add Song
                         </div>
                         <div className="editor-button save" onClick={() => handleSave()}>
