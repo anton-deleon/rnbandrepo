@@ -1,5 +1,5 @@
 export async function fetchAllSongs() {
-    const response = await fetch('api/getAllSongs');
+    const response = await fetch('api/songs');
 
     if (!response.ok) {
         alert(`Could not update songs. Please try again later.`);

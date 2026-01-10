@@ -19,7 +19,7 @@ export function useUploadSong(filename, text) {
 
 				try {
 				// send as JSON payload (server writes file to disk for debugging)
-				const res = await fetch('/api/uploadSong', {
+				const res = await fetch('/api/songTxt', {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({ filename: fname, text: txt }),

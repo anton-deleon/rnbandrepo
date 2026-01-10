@@ -48,7 +48,7 @@ function Editor({ setEditing }) {
         setLoading(true);
         try {
             setStatus("Saving changes to database...");
-            const response = await fetch('/api/sendToDB', {
+            const response = await fetch('/api/songs', {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ songs: toSave, event_title: event_title })
