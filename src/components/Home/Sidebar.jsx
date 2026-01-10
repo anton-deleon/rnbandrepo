@@ -2,11 +2,9 @@ import '../../css/sidebar.css'
 import SongList from './songList';
 import LoadingSpinner from './LoadingSpinner';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { fetchAllSongs } from '../../functions/fetchAllSongs';
 
-function Sidebar({ toggleLoadSong, showSidebar, toggleSidebar }) {
-    const navigate = useNavigate();
+function Sidebar({ toggleLoadSong, showSidebar, toggleSidebar, setEditing }) {
     const [info, setInfo] = useState({});
     const [songs, setSongs] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -90,7 +88,7 @@ function Sidebar({ toggleLoadSong, showSidebar, toggleSidebar }) {
                 <img
                     className={`editor-icon`}
                     src='editor-icon.svg'
-                    onClick={() => navigate('/editor')}
+                    onClick={() => setEditing(true)}
                 />
                 <input type="text" className="search-bar" id="searchBar" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
                 {songLists.map(list => (

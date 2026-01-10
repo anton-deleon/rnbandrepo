@@ -1,16 +1,10 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './views/Home';
 import Editor from './views/Editor';
+import { useState } from 'react';
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/editor" element={<Editor />} />
-      </Routes>
-    </BrowserRouter>
-  );
+  const [editing, setEditing] = useState(false);
+  return editing ? <Editor setEditing={setEditing} /> : <Home setEditing={setEditing} />;
 }
 
 export default App;

@@ -7,7 +7,7 @@ import { parseSong } from '../functions/parseSong';
 import { Analytics } from '@vercel/analytics/react';
 import Autoscroll from '../components/Home/Autoscroll';
 
-function Home() {
+function Home({ setEditing }) {
   const [activeSong, setActiveSong] = useState({});
   const [activeKey, setActiveKey] = useState({ key: "C", singer: "" });
   const [keyDiff, setKeyDiff] = useState(0);
@@ -61,6 +61,7 @@ function Home() {
           toggleLoadSong={toggleLoadSong}
           showSidebar={showSidebar}
           toggleSidebar={toggleSidebar}
+          setEditing={setEditing}
         />
         <Autoscroll
           containerRef={containerRef}

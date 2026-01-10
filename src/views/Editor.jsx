@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import SongTable from "../components/Editor/SongTable";
 import SongEditor from "../components/Editor/SongEditor";
 import LoadingSpinner from "../components/Home/LoadingSpinner";
@@ -8,8 +7,7 @@ import { getDifferentAttributes } from "../functions/getDifferentAttributes";
 import { fetchAllSongs } from "../functions/fetchAllSongs";
 import "../css/editor.css";
 
-function Editor() {
-    const navigate = useNavigate();
+function Editor({ setEditing }) {
     const [showEditor, setShowEditor] = useState(false);
     const [activeSong, setActiveSong] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -62,7 +60,7 @@ function Editor() {
                 setStatus("Songs updated! Returning to home...");
                 sessionStorage.removeItem("temp");
                 await fetchAllSongs();
-                navigate('/');
+                setEditing(false);
             }
         } catch (e) {
             console.error("Error during save:", e);
@@ -81,7 +79,7 @@ function Editor() {
             const tempRaw = sessionStorage.getItem("temp");
             var arr = tempRaw ? JSON.parse(tempRaw) : [];
 
-            const {lyrics, ...song} = editedSong;
+            const { lyrics, ...song } = editedSong;
 
             const existing = arr.find(s => s.id === song.id)
             if (existing) {
@@ -136,7 +134,7 @@ function Editor() {
             (
                 <div className="editor-container">
                     <div className="buttons-container">
-                        <div className="editor-button back" onClick={() => navigate('/')}>
+                        <div className="editor-button back" onClick={() => setEditing(false)}>
                             Back
                         </div>
                         <div className="editor-button add" onClick={() => handleActiveSong({})}>
