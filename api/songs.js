@@ -60,28 +60,52 @@ export default async function handler(req, res) {
 
     else if (req.method === 'POST') {
         const promises = req.body.songs.map(async (song) => {
-            try {
-                const { _id, ...songData } = song;
+            if (song._id) {
+                try {
+                    const { _id, ...songData } = song;
 
-                var update_response = await fetch(`https://rnbandrepo-e7c5.restdb.io/rest/songs/${_id}`, {
-                    method: "PUT",
-                    cache: "no-cache",
-                    json: true,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'x-apikey': process.env.DB_API_KEY
-                    },
-                    body: JSON.stringify(songData)
-                });
+                    var update_response = await fetch(`https://rnbandrepo-e7c5.restdb.io/rest/songs/${_id}`, {
+                        method: "PUT",
+                        cache: "no-cache",
+                        json: true,
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'x-apikey': process.env.DB_API_KEY
+                        },
+                        body: JSON.stringify(songData)
+                    });
 
-                if (!update_response.ok) throw new Error(`HTTP error! status: ${update_response.status}`);
+                    if (!update_response.ok) throw new Error(`HTTP error! status: ${update_response.status}`);
 
-                const data = await update_response.json();
+                    const data = await update_response.json();
 
-                return data;
-            } catch (error) {
-                console.error('Error updating song:', error);
-                return { error: error.message, songId: song._id };
+                    return data;
+                } catch (error) {
+                    console.error('Error updating song:', error);
+                    return { error: error.message, songId: song._id };
+                }
+            } else {
+                try {
+                    var create_response = await fetch(`https://rnbandrepo-e7c5.restdb.io/rest/songs`, {
+                        method: "POST",
+                        cache: "no-cache",
+                        json: true,
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'x-apikey': process.env.DB_API_KEY
+                        },
+                        body: JSON.stringify(song)
+                    });
+
+                    if (!create_response.ok) throw new Error(`HTTP error! status: ${create_response.status}`);
+
+                    const data = await create_response.json();
+
+                    return data;
+                } catch (error) {
+                    console.error('Error creating song:', error);
+                    return { error: error.message, songId: song._id };
+                }
             }
         });
 

@@ -16,10 +16,12 @@ function Editor({ setEditing }) {
     const stored = JSON.parse(localStorage.getItem("songs"));
     const [event_title, setEventTitle] = useState(stored.info.title);
 
+    const tempSongs = JSON.parse(sessionStorage.getItem("temp")) || [];
     const [songs, setSongs] = useState(
-        stored.songs
-            .map(s => JSON.parse(sessionStorage.getItem("temp"))?.find(ts => ts.id === s.id) ?? s)
-            .sort((a, b) => a.title.localeCompare(b.title))
+        [
+            ...stored.songs.map(s => tempSongs.find(ts => ts.id === s.id) ?? s),
+            ...tempSongs.filter(ts => !stored.songs.some(s => s.id === ts.id))
+        ].sort((a, b) => a.title.localeCompare(b.title))
     );
 
     const swc_songs = songs.filter(s => s.swc).sort((a, b) => a.swc - b.swc);
@@ -28,6 +30,7 @@ function Editor({ setEditing }) {
     const active_songs = songs.filter(s => s.active).sort((a, b) => a.title.localeCompare(b.title));
 
     const addSongToLineup = (song, lineup) => {
+        console.log("Adding song to lineup:", song, lineup);
         const songToAdd = songs.find(s => s.id === song.id);
         if (!songToAdd) return;
 
@@ -84,7 +87,7 @@ function Editor({ setEditing }) {
             const existing = arr.find(s => s.id === song.id)
             if (existing) {
                 const storedSong = stored.songs.find(s => s.id === song.id)
-                if (checkSongsEqual(storedSong, song)) {
+                if (storedSong && checkSongsEqual(storedSong, song)) {
                     arr.splice(arr.findIndex(s => s.id === song.id), 1)
                 } else
                     arr = arr.map(s => s.id === song.id ? song : s)
@@ -95,9 +98,10 @@ function Editor({ setEditing }) {
         }
 
         setSongs(
-            stored.songs
-                .map(s => JSON.parse(sessionStorage.getItem("temp"))?.find(ts => ts.id === s.id) ?? s)
-                .sort((a, b) => a.title.localeCompare(b.title))
+            [
+                ...stored.songs.map(s => JSON.parse(sessionStorage.getItem("temp"))?.find(ts => ts.id === s.id) ?? s),
+                ...JSON.parse(sessionStorage.getItem("temp"))?.filter(ts => !stored.songs.some(s => s.id === ts.id)) || []
+            ].sort((a, b) => a.title.localeCompare(b.title))
         );
     }
 

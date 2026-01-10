@@ -148,3 +148,12 @@
     word-break: normal;
     overflow-x: auto; /* allow horizontal scrolling when lines are long */
 }
+
+.song-textarea.error {
+    border-color: red;
+}
+
+.error-message {
+    color: red;
+    font-size: 0.9rem;
+}
