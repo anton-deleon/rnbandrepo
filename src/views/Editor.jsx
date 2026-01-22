@@ -30,7 +30,6 @@ function Editor({ setEditing }) {
     const active_songs = songs.filter(s => s.active).sort((a, b) => a.title.localeCompare(b.title));
 
     const addSongToLineup = (song, lineup) => {
-        console.log("Adding song to lineup:", song, lineup);
         const songToAdd = songs.find(s => s.id === song.id);
         if (!songToAdd) return;
 

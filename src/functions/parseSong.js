@@ -20,7 +20,6 @@ export function parseSong(metadata, lyrics, key, keyDiff, numeralMode = false) {
             if (["C#", "Db", "D#", "Eb", "F#", "Gb", "G#", "Ab", "A#", "Bb"].includes(currentKey)) {
                 item.chords = Chord.parse(item.chords).useModifier('b').normalize().toString();
             } else {
-                console.log(item.chords);
                 item.chords = Chord.parse(item.chords).useModifier('#').normalize().toString();
             }
 
