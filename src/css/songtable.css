@@ -27,7 +27,7 @@
     margin-bottom: 10px;
     padding: 0px 10px;
     gap: 10px;
-    width: calc(100vw - 25px);
+    width: 100%;
 }
 
 .song-table-title-container span {
@@ -39,9 +39,38 @@
 }
 
 .song-table-title-container input {
-    width: 50%;
+    width: 60%;
     line-height: 1.5em;
     flex-shrink: 0;
+    flex: 1;
+    min-width: 200px;
+}
+
+.search-filter-container {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 1;
+    min-width: 0;
+}
+
+.active-filter-button {
+    padding: 5px 15px;
+    background: light-dark(#f0f0f0, #444);
+    border: 1px solid light-dark(#ccc, #666);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: inherit;
+    transition: background-color 0.2s;
+}
+
+.active-filter-button:hover {
+    background: light-dark(#e0e0e0, #555);
+}
+
+.active-filter-button.active {
+    background: light-dark(#4CAF50, #2d5016);
+    color: light-dark(white, #fff);
+    border-color: light-dark(#45a049, #2d5016);
 }
 
 .collapse-button {

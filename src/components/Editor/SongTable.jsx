@@ -4,10 +4,35 @@ import "../../css/songtable.css";
 function SongTable({ songs, title, handleActiveSong, handleEditSong, lineup = null, titleEditable = false, setEventTitle = null, addSongToLineup = null }) {
     const [filteredSongs, setFilteredSongs] = useState(songs);
     const [isCollapsed, setIsCollapsed] = useState(false);
+    const [searchValue, setSearchValue] = useState("");
+    const [filterActive, setFilterActive] = useState(false);
     const sortedSongs = [...filteredSongs].sort((a, b) => a[lineup] - b[lineup]);
 
+    const applyFilters = (searchTerm, activeOnly) => {
+        let result = songs;
+
+        if (searchTerm) {
+            result = result.filter(song =>
+                song.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                song.artist.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        }
+
+        if (activeOnly) {
+            result = result.filter(song => song.active);
+        }
+
+        setFilteredSongs(result);
+    };
+
     const handleSearch = (value) => {
-        setFilteredSongs(songs.filter(song => song.title.toLowerCase().includes(value.toLowerCase()) || song.artist.toLowerCase().includes(value.toLowerCase())));
+        setSearchValue(value);
+        applyFilters(value, filterActive);
+    };
+
+    const handleFilterActive = () => {
+        setFilterActive(!filterActive);
+        applyFilters(searchValue, !filterActive);
     }
 
     const handleSwitchOrder = (song, index) => {
@@ -41,6 +66,12 @@ function SongTable({ songs, title, handleActiveSong, handleEditSong, lineup = nu
             s[lineup] = index - 1
             handleEditSong(s);
         });
+    };
+
+    const handleAddToLineup = (song, lineup) => {
+        addSongToLineup(song, lineup);
+        setSearchValue("");
+        applyFilters("", filterActive);
     };
 
     useEffect(() => {
@@ -112,7 +143,22 @@ function SongTable({ songs, title, handleActiveSong, handleEditSong, lineup = nu
                     {isCollapsed ? "▶" : "▼"}
                 </button>
                 <span className="event-title">{title}</span>
-                <input id="searchBar" type="search" placeholder="Search..." onChange={(e) => { handleSearch(e.target.value) }} />
+                <div className="search-filter-container">
+                    <input
+                        id="searchBar"
+                        type="search"
+                        placeholder="Search..."
+                        value={searchValue}
+                        onChange={(e) => { handleSearch(e.target.value) }}
+                    />
+                    <button
+                        className={`active-filter-button ${filterActive ? 'active' : ''}`}
+                        onClick={handleFilterActive}
+                        title="Filter active songs"
+                    >
+                        Active
+                    </button>
+                </div>
             </div>
             {!isCollapsed && (
                 <table className="song-table">
@@ -132,9 +178,9 @@ function SongTable({ songs, title, handleActiveSong, handleEditSong, lineup = nu
                                         <td>{song.artist}</td>
                                         <td>
                                             <div className="actions-container">
-                                                <div onClick={() => addSongToLineup(song, "swc")}>Add to SWC</div>
-                                                <div onClick={() => addSongToLineup(song, "tnl")}>Add to TNL</div>
-                                                <div onClick={() => addSongToLineup(song, "event")}>Add to Event</div>
+                                                <div onClick={() => handleAddToLineup(song, "swc")}>Add to SWC</div>
+                                                <div onClick={() => handleAddToLineup(song, "tnl")}>Add to TNL</div>
+                                                <div onClick={() => handleAddToLineup(song, "event")}>Add to Event</div>
                                             </div>
                                         </td>
                                     </tr>

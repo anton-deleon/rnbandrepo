@@ -27,8 +27,7 @@ function Editor({ setEditing }) {
     const swc_songs = songs.filter(s => s.swc).sort((a, b) => a.swc - b.swc);
     const tnl_songs = songs.filter(s => s.tnl).sort((a, b) => a.tnl - b.tnl);
     const event_songs = songs.filter(s => s.event).sort((a, b) => a.event - b.event);
-    const active_songs = songs.filter(s => s.active).sort((a, b) => a.title.localeCompare(b.title));
-
+    
     const addSongToLineup = (song, lineup) => {
         const songToAdd = songs.find(s => s.id === song.id);
         if (!songToAdd) return;
@@ -173,16 +172,9 @@ function Editor({ setEditing }) {
                         titleEditable={true}
                         setEventTitle={setEventTitle}
                     />
+
                     <SongTable
-                        songs={active_songs}
-                        title="Active Songs"
-                        handleActiveSong={handleActiveSong}
-                        handleEditSong={handleEditSong}
-                        lineup={false}
-                        addSongToLineup={addSongToLineup}
-                    />
-                    <SongTable
-                        songs={songs.filter(s => !s.swc && !s.tnl && !s.event && !s.active)}
+                        songs={songs.filter(s => !s.swc && !s.tnl && !s.event)}
                         title="All Songs"
                         handleActiveSong={handleActiveSong}
                         handleEditSong={handleEditSong}
