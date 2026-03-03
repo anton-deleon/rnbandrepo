@@ -27,7 +27,7 @@ function Editor({ setEditing }) {
     const swc_songs = songs.filter(s => s.swc).sort((a, b) => a.swc - b.swc);
     const tnl_songs = songs.filter(s => s.tnl).sort((a, b) => a.tnl - b.tnl);
     const event_songs = songs.filter(s => s.event).sort((a, b) => a.event - b.event);
-    
+
     const addSongToLineup = (song, lineup) => {
         const songToAdd = songs.find(s => s.id === song.id);
         if (!songToAdd) return;
@@ -104,9 +104,9 @@ function Editor({ setEditing }) {
     }
 
     useEffect(() => {
-        if (!localStorage.getItem("singers") && JSON.parse(localStorage.getItem("singers"))?.length !== 7) {
+        if (!localStorage.getItem("singers") || JSON.parse(localStorage.getItem("singers"))?.length !== 9) {
             const fetchAllSingers = async () => {
-                const response = await fetch('/api/getAllSingers');
+                const response = await fetch('/api/singers');
 
                 if (!response.ok) console.error(response.error);
                 else {

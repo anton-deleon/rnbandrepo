@@ -111,6 +111,27 @@ export default async function handler(req, res) {
 
         const responses = await Promise.all(promises);
 
+        const event_title = req.body.event_title;
+        if (event_title) {
+            try {
+                var event_response = await fetch(`https://rnbandrepo-e7c5.restdb.io/rest/event/${process.env.EVENT_ID}`, {
+                    method: "PUT",
+                    cache: "no-cache",
+                    json: true,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-apikey': process.env.DB_API_KEY
+                    },
+                    body: JSON.stringify({ title: event_title })
+                });
+
+                if (!event_response.ok) throw new Error(`HTTP error! status: ${event_response.status}`);
+            } catch (error) {
+                console.error('Error creating event:', error);
+                return res.status(400).json({ "message": "An error has occurred while creating the event" });
+            }
+        }
+
         return res.status(200).json({ "message": "Data received successfully", responses });
     }
 
