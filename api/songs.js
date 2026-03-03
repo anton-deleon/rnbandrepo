@@ -112,8 +112,14 @@ export default async function handler(req, res) {
         const responses = await Promise.all(promises);
 
         const event_title = req.body.event_title;
-        if (event_title) {
+        const event_date = req.body.event_date;
+        // only update if at least one of the fields is provided
+        if (event_title || event_date) {
             try {
+                const bodyObj = {};
+                if (event_title) bodyObj.title = event_title;
+                if (event_date) bodyObj.event_date = event_date;
+
                 var event_response = await fetch(`https://rnbandrepo-e7c5.restdb.io/rest/event/${process.env.EVENT_ID}`, {
                     method: "PUT",
                     cache: "no-cache",
@@ -122,13 +128,13 @@ export default async function handler(req, res) {
                         'Content-Type': 'application/json',
                         'x-apikey': process.env.DB_API_KEY
                     },
-                    body: JSON.stringify({ title: event_title })
+                    body: JSON.stringify(bodyObj)
                 });
 
                 if (!event_response.ok) throw new Error(`HTTP error! status: ${event_response.status}`);
             } catch (error) {
-                console.error('Error creating event:', error);
-                return res.status(400).json({ "message": "An error has occurred while creating the event" });
+                console.error('Error updating event info:', error);
+                return res.status(400).json({ "message": "An error has occurred while updating the event" });
             }
         }
 

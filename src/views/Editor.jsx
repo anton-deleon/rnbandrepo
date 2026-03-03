@@ -15,6 +15,7 @@ function Editor({ setEditing }) {
 
     const stored = JSON.parse(localStorage.getItem("songs"));
     const [event_title, setEventTitle] = useState(stored.info.title);
+    const [event_date, setEventDate] = useState(stored.info.event_date || "");
 
     const tempSongs = JSON.parse(sessionStorage.getItem("temp")) || [];
     const [songs, setSongs] = useState(
@@ -52,23 +53,18 @@ function Editor({ setEditing }) {
             const response = await fetch('/api/songs', {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ songs: toSave, event_title: event_title })
+                body: JSON.stringify({ songs: toSave, event_title: event_title, event_date: event_date })
             });
-
-            if (!response.ok) {
-                console.error("Failed to save data");
-            } else {
-                setStatus("Songs updated! Returning to home...");
-                sessionStorage.removeItem("temp");
-                await fetchAllSongs();
-                setEditing(false);
-            }
+            setStatus("Songs updated! Returning to home...");
+            sessionStorage.removeItem("temp");
+            await fetchAllSongs();
+            setEditing(false);
         } catch (e) {
-            console.error("Error during save:", e);
-        } finally {
-            setLoading(false);
-        }
+        console.error("Error during save:", e);
+    } finally {
+        setLoading(false);
     }
+}
 
     const handleActiveSong = (song) => {
         setShowEditor(song !== null)
@@ -171,6 +167,8 @@ function Editor({ setEditing }) {
                         lineup="event"
                         titleEditable={true}
                         setEventTitle={setEventTitle}
+                        eventDate={event_date}
+                        setEventDate={setEventDate}
                     />
 
                     <SongTable

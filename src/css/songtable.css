@@ -20,6 +20,22 @@
     width: calc(100% - 6px);
 }
 
+/* new container for the editable date input below the title */
+.event-date-container {
+    text-align: center;
+    margin: 5px 0;
+}
+
+.event-date-container input {
+    border: 1px solid light-dark(black, #ccc);
+    background: transparent;
+    font-size: inherit;
+    font-family: inherit;
+    color: inherit;
+    text-align: center;
+    width: calc(100% - 6px);
+}
+
 .song-table-title-container {
     display: flex;
     justify-content: space-between;

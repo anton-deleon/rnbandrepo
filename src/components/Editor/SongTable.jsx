@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "../../css/songtable.css";
 
-function SongTable({ songs, title, handleActiveSong, handleEditSong, lineup = null, titleEditable = false, setEventTitle = null, addSongToLineup = null }) {
+function SongTable({ songs, title, handleActiveSong, handleEditSong, lineup = null, titleEditable = false, setEventTitle = null, eventDate = "", setEventDate = null, addSongToLineup = null }) {
     const [filteredSongs, setFilteredSongs] = useState(songs);
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [searchValue, setSearchValue] = useState("");
@@ -80,14 +80,36 @@ function SongTable({ songs, title, handleActiveSong, handleEditSong, lineup = nu
 
     return lineup ? (
         <div className="lineup-table-container">
-            <h2 className="event-title">{titleEditable
-                ? <>
-                    <label htmlFor="titleInput">Event</label>
-                    <input id="titleInput" type="text" placeholder="Enter event title..." value={title} onChange={(e) => setEventTitle(e.target.value)} />
-                </>
-                :
-                title}
+            <h2 className="event-title">{
+                titleEditable
+                    ?
+                    <>
+                        <label htmlFor="titleInput">Event</label>
+                        <input
+                            id="titleInput"
+                            type="text"
+                            placeholder="Enter event title..."
+                            value={title}
+                            onChange={(e) => setEventTitle(e.target.value)}
+                        />
+</>
+                    :
+                    title
+            }
             </h2>
+            {/* date field only shows when title is editable */}
+            {titleEditable && (
+                <div className="event-date-container">
+                    <label htmlFor="dateInput">Date</label>
+                    <input
+                        id="dateInput"
+                        type="text"
+                        placeholder="MM/DD/YY"
+                        value={eventDate || ""}
+                        onChange={(e) => setEventDate && setEventDate(e.target.value)}
+                    />
+                </div>
+            )}
             <table className="song-table">
                 <thead>
                     <tr>
