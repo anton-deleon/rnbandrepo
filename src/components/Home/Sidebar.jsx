@@ -32,7 +32,7 @@ function Sidebar({ toggleLoadSong, showSidebar, toggleSidebar, setEditing }) {
         if (localSongs && localStorage.getItem("lastUpdated")) {
             const lastUpdated = new Date(localStorage.getItem("lastUpdated"));
             const diffInHours = (now - lastUpdated) / (1000 * 60 * 60 * 24);
-            if (diffInHours <= 3) {
+            if (diffInHours <= 1) {
                 setInfo(localSongs.info);
                 setSongs(localSongs.songs);
                 setLoading(false);
