@@ -100,7 +100,7 @@ function Editor({ setEditing }) {
     }
 
     useEffect(() => {
-        if (!localStorage.getItem("singers") || JSON.parse(localStorage.getItem("singers"))?.length !== 9) {
+        if (!localStorage.getItem("singers") || JSON.parse(localStorage.getItem("singers"))?.length !== 7) {
             const fetchAllSingers = async () => {
                 const response = await fetch('/api/singers');
 
