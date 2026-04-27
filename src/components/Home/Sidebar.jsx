@@ -39,6 +39,12 @@ function Sidebar({ toggleLoadSong, showSidebar, toggleSidebar }) {
             localStorage.removeItem("songs");
         }
 
+        try {
+            localSongs.songs.sort((a, b) => a.title.localeCompare(b.title));
+        } catch (error) {
+            localStorage.removeItem("songs");
+        }
+
         const now = new Date();
         if (localSongs && localStorage.getItem("lastUpdated")) {
             const lastUpdated = new Date(localStorage.getItem("lastUpdated"));
