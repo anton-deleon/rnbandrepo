@@ -5,7 +5,7 @@ export function parseSong(metadata, lyrics, key, keyDiff, numeralMode = false) {
     const origKey = metadata.defaults.Orig;
 
     const parser = new ChordSheetJS.UltimateGuitarParser();
-    const unserializedSong = parser.parse(`${lyrics}`).setKey(origKey).changeKey(key).transpose(keyDiff > 0 ? keyDiff - 12 : keyDiff);
+    var unserializedSong = parser.parse(`${lyrics}`);
 
     const currentKey = Chord.parse(key).transpose(keyDiff).toString();
     for (let i = 0; i < unserializedSong.lines.length; i++) {
@@ -15,16 +15,25 @@ export function parseSong(metadata, lyrics, key, keyDiff, numeralMode = false) {
 
         for (let j = 0; j < line.items.length; j++) {
             const item = line.items[j];
+
             if (!item.chords || item.chords.trim() == "") continue;
 
+            var chord = Chord.parse(item.chords);
+
+            if (chord.suffix != null && chord.suffix.includes("l")) {
+                item.lyrics = item.chords + ' ';
+                item.chords = "";
+                continue;
+            }
+
             if (["C#", "Db", "D#", "Eb", "F#", "Gb", "G#", "Ab", "A#", "Bb"].includes(currentKey)) {
-                item.chords = Chord.parse(item.chords).useModifier('b').normalize().toString();
+                item.chords = chord.useModifier('b').normalize().toString();
             } else {
-                item.chords = Chord.parse(item.chords).useModifier('#').normalize().toString();
+                item.chords = chord.useModifier('#').normalize().toString();
             }
 
             if (numeralMode) {
-                item.chords = Chord.parse(item.chords)
+                item.chords = chord
                     .toNumeralString(currentKey)
                     .replace(/([ivx]+)m/g, '$1')
                     .replace('#vi', 'vi')
@@ -35,6 +44,7 @@ export function parseSong(metadata, lyrics, key, keyDiff, numeralMode = false) {
         }
     }
 
+    unserializedSong = unserializedSong.setKey(origKey).changeKey(key).transpose(keyDiff > 0 ? keyDiff - 12 : keyDiff);
     const formatter = new ChordSheetJS.HtmlTableFormatter();
     var disp = formatter.format(unserializedSong);
 
