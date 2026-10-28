@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
     try {
-        var songs_response = await fetch('https://rnbandrepo-e7c5.restdb.io/rest/songs', {
+        var songs_response = await fetch(`${process.env.DB_URL}/songs`, {
             method: "GET",
             cache: "no-cache",
             headers: { 'x-apikey': process.env.DB_API_KEY }
@@ -35,7 +35,7 @@ export default async function handler(req, res) {
         }
 
         if (songs_data.filter(song => song.event).length > 0) {
-            const info_response = await fetch('https://rnbandrepo-e7c5.restdb.io/rest/event?max=1', {
+            const info_response = await fetch(`${process.env.DB_URL}/event?max=1`, {
                 method: "GET",
                 cache: "no-cache",
                 headers: { 'x-apikey': process.env.DB_API_KEY }
