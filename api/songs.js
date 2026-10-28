@@ -1,7 +1,7 @@
 export default async function handler(req, res) {
     if (req.method === 'GET') {
         try {
-            var songs_response = await fetch('https://rnbandrepo-e7c5.restdb.io/rest/songs', {
+            var songs_response = await fetch(`${process.env.DB_URL}/songs`, {
                 method: "GET",
                 cache: "no-cache",
                 headers: { 'x-apikey': process.env.DB_API_KEY }
@@ -36,7 +36,7 @@ export default async function handler(req, res) {
             }
 
             if (songs_data.filter(song => song.event).length > 0) {
-                const info_response = await fetch('https://rnbandrepo-e7c5.restdb.io/rest/event?max=1', {
+                const info_response = await fetch(`${process.env.DB_URL}/event?max=1`, {
                     method: "GET",
                     cache: "no-cache",
                     headers: { 'x-apikey': process.env.DB_API_KEY }
@@ -64,7 +64,7 @@ export default async function handler(req, res) {
                 try {
                     const { _id, ...songData } = song;
 
-                    var update_response = await fetch(`https://rnbandrepo-e7c5.restdb.io/rest/songs/${_id}`, {
+                    var update_response = await fetch(`${process.env.DB_URL}/songs/${_id}`, {
                         method: "PUT",
                         cache: "no-cache",
                         json: true,
@@ -86,7 +86,7 @@ export default async function handler(req, res) {
                 }
             } else {
                 try {
-                    var create_response = await fetch(`https://rnbandrepo-e7c5.restdb.io/rest/songs`, {
+                    var create_response = await fetch(`${process.env.DB_URL}/songs`, {
                         method: "POST",
                         cache: "no-cache",
                         json: true,
@@ -120,7 +120,7 @@ export default async function handler(req, res) {
                 if (event_title) bodyObj.title = event_title;
                 if (event_date) bodyObj.event_date = event_date;
 
-                var event_response = await fetch(`https://rnbandrepo-e7c5.restdb.io/rest/event/${process.env.EVENT_ID}`, {
+                var event_response = await fetch(`${process.env.DB_URL}/event/${process.env.EVENT_ID}`, {
                     method: "PUT",
                     cache: "no-cache",
                     json: true,

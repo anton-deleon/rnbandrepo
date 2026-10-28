@@ -2,7 +2,7 @@ export default async function handler(req, res) {
     if (req.method !== 'GET') return res.status(405).json({ "message": "Method not allowed" });
 
     try {
-        var names_response = await fetch('https://rnbandrepo-e7c5.restdb.io/rest/singers', {
+        var names_response = await fetch(`${process.env.DB_URL}/singers`, {
             method: "GET",
             cache: "no-cache",
             headers: { 'x-apikey': process.env.DB_API_KEY }
