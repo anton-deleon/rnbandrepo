@@ -109,7 +109,7 @@ function Options({ metadata, activeKey, setActiveKey, keyDiff, setKeyDiff, numer
                     style={{ display: 'flex' }}
                     onClick={() => setNumeralMode(!numeralMode)}
                 >
-                    {numeralMode ? "Chords" : "Numeral"}
+                    {numeralMode ? "Chords" : "Numeric"}
                 </div>
                 <div
                     className="hide-chords-button"

@@ -1,4 +1,4 @@
-import ChordSheetJS, { Chord } from 'chordsheetjs';
+import ChordSheetJS, { Chord, Key } from 'chordsheetjs';
 
 
 export function parseSong(metadata, lyrics, key, keyDiff, numeralMode = false) {
@@ -6,8 +6,9 @@ export function parseSong(metadata, lyrics, key, keyDiff, numeralMode = false) {
 
     const parser = new ChordSheetJS.UltimateGuitarParser();
     var unserializedSong = parser.parse(`${lyrics}`);
+    unserializedSong = unserializedSong.setKey(origKey).changeKey(key).transpose(keyDiff > 0 ? keyDiff - 12 : keyDiff);
 
-    const currentKey = Chord.parse(key).transpose(keyDiff).toString();
+    const currentKey = Key.parse(key).transpose(keyDiff).toString();
     for (let i = 0; i < unserializedSong.lines.length; i++) {
         const line = unserializedSong.lines[i];
 
@@ -33,18 +34,13 @@ export function parseSong(metadata, lyrics, key, keyDiff, numeralMode = false) {
             }
 
             if (numeralMode) {
-                item.chords = chord
-                    .toNumeralString(currentKey)
-                    .replace(/([ivx]+)m/g, '$1')
-                    .replace('#vi', 'vi')
-                    .replace('bvii', 'vi')
-                    .replace('#iii', 'iii')
-                    .replace('#VI', 'bVII')
+                item.chords = Chord.parse(chord.root.toString().replace('m', ''))
+                    .toNumericString(currentKey)
+                    .replace('#6', 'b7');
             }
         }
     }
 
-    unserializedSong = unserializedSong.setKey(origKey).changeKey(key).transpose(keyDiff > 0 ? keyDiff - 12 : keyDiff);
     const formatter = new ChordSheetJS.HtmlTableFormatter();
     var disp = formatter.format(unserializedSong);
 
